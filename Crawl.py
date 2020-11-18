@@ -27,8 +27,8 @@ def crawl_webtoon(episode_url):
     key_file = open(key_path)
     key_content = key_file.read()
     key_component = key_content.split(' ')
-    ID = key_component[0]
-    PWD = key_component[1]
+    id_name = key_component[0]
+    pwd = key_component[1]
 
     print("Key value imported")
 
@@ -44,8 +44,8 @@ def crawl_webtoon(episode_url):
 
     print("Going to Login Page")
 
-    driver.execute_script("document.getElementsByName('id')[0].value=\'" + ID + "\'")
-    driver.execute_script("document.getElementsByName('pw')[0].value=\'" + PWD + "\'")
+    driver.execute_script("document.getElementsByName('id')[0].value=\'" + id_name + "\'")
+    driver.execute_script("document.getElementsByName('pw')[0].value=\'" + pwd + "\'")
     driver.find_element_by_xpath('//*[@id="frmNIDLogin"]/fieldset/input').click()
 
     print("Login success!\n")
@@ -54,11 +54,13 @@ def crawl_webtoon(episode_url):
     try:
         for url in episode_url:
 
+            print("Going to", url)
+
             driver.get(url)
 
             try:
                 WebDriverWait(driver, 10).until(EC.invisibility_of_element_located((By.CSS_SELECTOR,
-                                                                                    "img[src='https://static-comic.pstatic.net/staticImages/COMICWEB/NAVER/img/common/blank.gif']")))
+                    "img[src='https://static-comic.pstatic.net/staticImages/COMICWEB/NAVER/img/common/blank.gif']")))
             except Exception as ex:
                 print("Page Loading Error")
                 print(ex)
@@ -79,6 +81,7 @@ def crawl_webtoon(episode_url):
                     continue
 
             image_name_list = []
+            image_dir_path = "."
             for img_tag in soup.select('.wt_viewer img'):
                 image_file_url = img_tag['src']
                 image_name = os.path.basename(image_file_url)
@@ -116,7 +119,7 @@ def crawl_webtoon(episode_url):
             print("Image resize completed!")
 
             with open(ep_title+".pdf", "wb") as f:
-                f.write(convert([i for i in image_name_list if i.endswith('.jpg')]))
+                f.write(convert([k for k in image_name_list if k.endswith(".jpg")]))
                 f.close()
             os.chdir("../")
             shutil.move(image_dir_path+"/"+ep_title+".pdf", ep_title+".pdf")
@@ -128,6 +131,7 @@ def crawl_webtoon(episode_url):
     except Exception as ex:
         print(ex)
         print("Error!!")
+
     driver.quit()
 
     print("Complete!")
@@ -135,9 +139,11 @@ def crawl_webtoon(episode_url):
 
 if __name__ == '__main__':
     episode_url = []
+
     webtoon = {
-        # '293523': 131
-        '655749': 56
+        '655749': 100,
+        '662774': 213,
+        '651673': 514
     }
     for i in webtoon.keys():
         for j in range(1, webtoon[i]+1):
