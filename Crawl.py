@@ -1,3 +1,10 @@
+"""
+made by. eslerkang
+last update. 20.11.20
+chromedriver 설치 후 파이썬 파일 바로 이전 디렉토리에 둘 것.
+key.txt 파일도 파이썬 파로 이전 디렉토리에 [id] [pwd] 형식으로 둘 것(아이디 쓰고 한 칸 띄고 비밀번호)
+"""
+
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import os
@@ -141,9 +148,13 @@ if __name__ == '__main__':
     episode_url = []
 
     webtoon = {
-        '655749': 100,
-        '662774': 213,
-        '651673': 514
+        #'655749': 100, #닥터 프로스트
+        #'662774': 213, #고수
+        #'651673': 514, #유미의 세포들
+        #'478262': 60, #레사 시즌 1
+        #'603159': 236, #레사 시즌 2, 3
+        '733766': 54, #인생존망
+
     }
     for i in webtoon.keys():
         for j in range(1, webtoon[i]+1):
